@@ -33,26 +33,16 @@
 	<hr>
 		<!-- 在这之下写东西。-->
 	<div class="row">
-		<canvas id="logo" style="border:1px solid #BBBBBB; width:640px;height:400px;margin:0 auto;display:block;">
+		<canvas id="logo" width=640 height=400 style="border:1px solid #BBBBBB;margin:0 auto;display:block;">
 	</div>
 
 
-
-
-
-
-
-
-
-	  	<!-- 在这之上写东西。-->
-	<footer class="footer well" >
-		<p >Copyright &copy;2012 Shortytall, All Rights Reserved.</p>
-		<!-- /微博加关注 BEGIN-->
-		<div class="full-right">
-			<iframe width="136" height="24" frameborder="0" allowtransparency="true" marginwidth="0" marginheight="0" scrolling="no" border="0" src="http://widget.weibo.com/relationship/followbutton.php?language=zh_cn&width=136&height=24&uid=2525207340&style=2&btn=red&dpc=1"></iframe>
+		<div  class="well" style="position:fixed;bottom:100px;width:920px;height:40px;">
+			<form class="form-inline" id="command">
+				<input type="text" placeholder="" id="input" autocomplete="off" style="width:910px;">
+			</form>
+			<p id="message"></p>
 		</div>
-		<!-- /微博加关注 END -->
-	</footer>   
 	</div> 
 	<!-- /container -->
 	<!--[if IE 6]>
@@ -61,5 +51,132 @@
 		<script src="http://storage.aliyun.com/pixels/assets/js/jquery-1.7.2.min.js"></script>
 		<script src="http://storage.aliyun.com/pixels/assets/js/bootstrap.min.js"></script> 
 		<script src="http://storage.aliyun.com/pixels/assets/js/application.js"></script>  
+		<script type="text/javascript">
+			var Logo = (function() {
+				var API ={}; 
+				var canvas;
+				var context;
+				var color = "#000000";
+				var angle = 0;
+				var site ={};
+				var pen;
+				//初始化
+				API.initialize = function(){
+					canvas = document.getElementById('logo');
+					context = canvas.getContext('2d');
+
+					var image = new Image();
+					image.src = "arrow.png";
+					image.width = 16;
+					image.height = 16;
+					site.x=320;
+					site.y=200;
+					image.onload = function () {
+						//context.drawImage(image,320,200,8,8);
+					}
+					context.lineWidth = 2;
+					pen = "open";
+				};
+				//前进X个单位
+				API.FD = function(length){
+					context.beginPath();
+					context.moveTo(site.x,site.y); 
+					var x = site.x - length*Math.sin(angle*Math.PI/180);
+					var y = site.y - length*Math.cos(angle*Math.PI/180);
+					context.lineTo(x,y);
+					if(pen == 'open')   
+						context.stroke(); 
+					context.closePath();
+					setsite(x,y); 
+					console.log('angle'+angle);
+				}
+				//后退X个单位
+				API.BK = function(length){
+					context.beginPath();
+					context.moveTo(site.x,site.y); 
+					var x = site.x + length*Math.sin(angle*Math.PI/180);
+					var y = site.y + length*Math.cos(angle*Math.PI/180);
+					context.lineTo(x,y);
+					if(pen == 'open')
+						context.stroke();
+					context.closePath(); 
+					setsite(x,y); 
+				}
+				//左转X度
+				API.LT = function(x){
+					angle += parseFloat(x);
+				}
+				//右转X度
+				API.RT = function(x){
+					angle -= parseFloat(x);
+					angle = angle%360;
+				}
+				API.PD = function(x){
+					pen = 'open';
+				}
+				API.PU = function(x){
+					pen = 'off';
+				}
+				function setsite(x,y){
+					site.x = x;
+					site.y = y;
+				}
+
+				return API;
+			})();
+			Logo.initialize();
+
+		</script>
+		<script type="text/javascript">
+			$('#input').focus();
+
+			$('#command').submit(function(event){
+				event.preventDefault();
+				var command = $('#input').attr('value').toUpperCase().replace(/[^A-Z0-9\+\-\*\/\[\]\:\>\<\=\.\s]+/g,'').replace(/(^\s+)|(\s+$)/g,'').split(/\s+/);
+				$('#input').attr('value','');
+				console.log(command);
+
+			function process(){
+				switch (command[0])
+				{
+					case 'FD':
+								{
+									Logo.FD(command[1]);
+								}
+								break
+					case 'BK':
+								{
+									Logo.BK(command[1]);
+								}
+								break
+					case 'PD':
+								{
+									Logo.PD();
+								}
+								break
+					case 'PU':
+								{
+									Logo.PU();
+								}
+								break
+					case 'LT':
+								{
+									Logo.LT(command[1]);
+								}
+								break
+					case 'RT':
+								{
+									Logo.RT(command[1]);
+								}
+								break
+
+					default:
+								alert("命令有误");
+			　　}
+				
+			});
+
+			}
+		</script>
 	</body>
 </html>
