@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8">
+			<title>JSLogo,By huiter</title>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<meta name="description" content="Logo语言HTML5实现版">
+			<meta name="author" content="huiter，90后技术宅。">
+			<!-- Le styles -->
+			<link href="http://storage.aliyun.com/pixels/assets/css/bootstrap.css" rel="stylesheet">
+			<style type="text/css">
+			body {
+			padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+			}
+			.page-header {
+			background-color: whiteSmoke;
+			padding: 20px 20px 10px;
+			margin: -20px -20px 20px;
+			}
+			footer {
+			margin-top: 17px;
+			padding-top: 17px;
+			border-top: 1px solid #EEE;
+			text-align: center;
+			}
+			</style>
+							
+			<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+			<!--[if lt IE 9]>
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+			<![endif]-->
+			<!-- Le fav and touch icons -->         
+			<link rel="shortcut icon" href="http://storage.aliyun.com/pixels/assets/ico/favicon.ico">
+	</head>
+
+	<body>
+		<div class="navbar navbar-fixed-top">
+			<div class="navbar-inner">
+				<div class="container">
+					<a class="brand" href="#">JSLogo</a>
+					<div class="nav"><span class="label label-important" style="margin:-10px 0 0 -20px;paddin:3">Beta</span></div>
+					<div class="nav-collapse">
+						<ul class="nav">
+							<li><a href="/">控制台</a></li>
+							<li class="active"><a href="/description.html">详细说明</a></li>
+							<li><a href="https://github.com/huiter/logo" target="_blank">Github</a></li>
+						</ul>
+					</div><!--/.nav-collapse --> 
+					<ul class="nav pull-right">
+                            <li class="divider-vertical"></li>
+                    <div class="full-right span2" style="padding:8px 0 0 0 ">
+						<iframe width="136" height="24" frameborder="0" allowtransparency="true" marginwidth="0" marginheight="0" scrolling="no" border="0" src="http://widget.weibo.com/relationship/followbutton.php?language=zh_cn&width=136&height=24&uid=2525207340&style=2&btn=red&dpc=1"></iframe>
+					</div>
+                    </ul>
+				</div>
+			</div>
+		</div>
+	<div class="container">
+		<h3>命令讲解及DEMO</h3>
+		<hr>
+		<p><code>FD 100</code>: 向前走100个单位</p>
+		<p><code>BK 50</code>: 向后走50个单位</p>
+		<p><code>LT 30</code>: 向左转30度</p>
+		<p><code>RT 90</code>: 向右转90度</p>
+		<p><code>PU</code>: 抬起笔，此时再执行移动的操作就不会留下痕迹</p>
+		<p><code>PD</code>: 落下笔，此时移动会留下痕迹，这个为默认状态</p>
+		<p><code>REPEAT 4 [ FD 90 LT 90 ]</code>: 重复4次【】中的操作</p>
+		<p><code>HOME</code>: 回到初始位置</p>
+		<p><code>RESET</code>: 还原到初始状态</p>
+		<p><code>COLOR RED</code>: 设置画笔颜色为红色，也支持#000000这种写法</p>
+
+		<h3>复杂点的DEMO</h3>
+		<hr>
+		<p><code>COLOR RED REPEAT 20 [FD 100 LT 150]</code>: 12角星</p>
+		<p><code>FD 100 RT 90 COLOR RED REPEAT 20 [FD 40 RT 90 FD 1 RT 90 FD 40 LT 90 FD 1 LT 90]</code>: 小红旗</p>
+		<P>更多DEMO等待你提供</P>
+		<h3>其他</h3>
+		<hr>
+		<p>项目代码托管在了github上，链接在导航上。目前这个东西只完成了一些简单的部分，希望能有大牛一起来把这个东西完成，以后可以给小朋友玩。</p>
+	<hr>
+		<footer>
+        <p>JSLogo © huiter 2012</p>
+      </footer>
+	</div> 
+	<!-- /container -->
+	<!--[if IE 6]>
+	<script src="http://letskillie6.googlecode.com/svn/trunk/letskillie6.zh_CN.pack.js"></script>
+	<![endif]-->
+		<script src="http://storage.aliyun.com/pixels/assets/js/jquery-1.7.2.min.js"></script>
+		<script src="http://storage.aliyun.com/pixels/assets/js/bootstrap.min.js"></script> 
+		<script src="http://storage.aliyun.com/pixels/assets/js/application.js"></script>  
+	</body>
+</html>

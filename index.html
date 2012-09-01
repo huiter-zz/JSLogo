@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8">
+			<title>JSLogo,By huiter</title>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<meta name="description" content="Logo语言HTML5实现版">
+			<meta name="author" content="huiter，90后技术宅。">
+			<!-- Le styles -->
+			<link href="http://storage.aliyun.com/pixels/assets/css/bootstrap.css" rel="stylesheet">
+			<style type="text/css">
+			body {
+			padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+			}
+			.page-header {
+			background-color: whiteSmoke;
+			padding: 20px 20px 10px;
+			margin: -20px -20px 20px;
+			}
+			footer {
+			margin-top: 17px;
+			padding-top: 17px;
+			border-top: 1px solid #EEE;
+			text-align: center;
+			}
+			</style>
+							
+			<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+			<!--[if lt IE 9]>
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+			<![endif]-->
+			<!-- Le fav and touch icons -->         
+			<link rel="shortcut icon" href="http://storage.aliyun.com/pixels/assets/ico/favicon.ico">
+	</head>
+
+	<body>
+		<div class="navbar navbar-fixed-top">
+			<div class="navbar-inner">
+				<div class="container">
+					<a class="brand" href="#">JSLogo</a>
+					<div class="nav"><span class="label label-important" style="margin:-10px 0 0 -20px;paddin:3">Beta</span></div>
+					<div class="nav-collapse">
+						<ul class="nav">
+							<li class="active"><a href="/">控制台</a></li>
+							<li ><a href="/description.html">详细说明</a></li>
+							<li><a href="https://github.com/huiter/logo" target="_blank">Github</a></li>
+						</ul>
+					</div><!--/.nav-collapse --> 
+					<ul class="nav pull-right">
+                            <li class="divider-vertical"></li>
+                    <div class="full-right span2" style="padding:8px 0 0 0 ">
+						<iframe width="136" height="24" frameborder="0" allowtransparency="true" marginwidth="0" marginheight="0" scrolling="no" border="0" src="http://widget.weibo.com/relationship/followbutton.php?language=zh_cn&width=136&height=24&uid=2525207340&style=2&btn=red&dpc=1"></iframe>
+					</div>
+                    </ul>
+				</div>
+			</div>
+		</div>
+	<div class="container">
+		
+	<div class="page-header">
+      <h1 style="text-align:center;">JSLogo<small>一款Javasctipt实现的Logo语言<span class="label label-inverse" style="margin-top:-2px;">简化版</span>解析器</small></h1>
+    </div>
+
+	<hr>
+		<!-- 在这之下写东西。-->
+		<h3>请先去浏览下详细说明，里面有命令的基本用法和DEMO</h3>
+		<table class="table table-bordered table-striped table-condensed">
+                            <thead>
+                            	<tr>
+    								<th>前进</th>
+    								<th>后退</th>
+									<th>左转</th>
+    								<th>右转</th>
+    								<th>抬笔</th>
+    								<th>落笔</th>
+    								<th>重复</th>
+    								<th>回家</th>
+    								<th>重置</th>
+    								<th>设置画笔颜色</th>
+    							</tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td><code>FD</code></td>
+                                <td><code>BK</code></td>
+                                <td><code>LT</code></td>
+                                <td><code>RT</code></td>
+                                <td><code>PU</code></td>
+                                <td><code>PD</code></td>
+                                <td><code>REPEAT</code></td>
+                                <td><code>HOME</code></td>
+                                <td><code>RESET</code></td>
+                                <td><code>COLOR</code></td>
+                              </tr>
+                            </tbody>
+                        </table>
+	<div class="row">
+
+
+		<canvas id="logo" width=640 height=400 style="border:1px solid #BBBBBB;margin:0 auto;display:block;">
+				<h3 style="text-align:center;">你的浏览器还不支持Canvas，请尝试使用<a class="btn" href="www.google.com/chrome/">CHROME浏览器</a></h3>
+		</canvas>
+	</div>
+
+
+		<div  class="well" style="width:920px;height:40px;">
+			<form class="form-inline" id="command">
+				<input type="text" placeholder="" id="input" autocomplete="off" style="width:910px;">
+			</form>
+			<p id="message"></p>
+		</div>
+		<h3>你可以在下面评论处留下你精美的DEMO代码,提交BUG,或者其他什么东西。</h3>
+		<div>
+			<script type='text/javascript' charset='utf-8' src='http://open.denglu.cc/connect/commentcode?appid=73218denBxpf1fVF5yuSD7AgpF6qdA'></script>
+		</div>
+
+		<footer>
+        <p>JSLogo © huiter 2012</p>
+      </footer>
+	</div> 
+	<!-- /container -->
+	<!--[if IE 6]>
+	<script src="http://letskillie6.googlecode.com/svn/trunk/letskillie6.zh_CN.pack.js"></script>
+	<![endif]-->
+		<script src="http://storage.aliyun.com/pixels/assets/js/jquery-1.7.2.min.js"></script>
+		<script src="http://storage.aliyun.com/pixels/assets/js/bootstrap.min.js"></script> 
+		<script src="http://storage.aliyun.com/pixels/assets/js/application.js"></script>  
+		<script type="text/javascript">
+			var Logo = (function() {
+				var API ={}; 
+				var canvas;
+				var context;
+				var color;
+				var angle;
+				var site ={};
+				var pen;
+				//初始化
+				API.initialize = function(){
+					canvas = document.getElementById('logo');
+					context = canvas.getContext('2d');
+					context.clearRect(0,0,640,400);
+					angle = 0;
+					color = "#000000";
+					site.x=320;
+					site.y=200;
+					pen = "open";
+					context.lineWidth = 2;
+					showinfo();
+				};
+				//前进X个单位
+				API.FD = function(length){
+					context.beginPath();
+					context.moveTo(site.x,site.y);
+					context.strokeStyle = color; 
+					var x = site.x - length*Math.sin(angle*Math.PI/180);
+					var y = site.y - length*Math.cos(angle*Math.PI/180);
+					context.lineTo(x,y);
+					if(pen == 'open')   
+						context.stroke(); 
+					context.closePath();
+					setsite(x,y); 
+				}
+				//后退X个单位
+				API.BK = function(length){
+					context.beginPath();
+					context.moveTo(site.x,site.y); 
+					context.strokeStyle = color; 
+					var x = site.x + length*Math.sin(angle*Math.PI/180);
+					var y = site.y + length*Math.cos(angle*Math.PI/180);
+					context.lineTo(x,y);
+					if(pen == 'open')
+						context.stroke();
+					context.closePath(); 
+					setsite(x,y); 
+				}
+				//左转X度
+				API.LT = function(x){
+					angle += parseFloat(x);
+					showinfo();
+				}
+				//右转X度
+				API.RT = function(x){
+					angle -= parseFloat(x);
+					angle = angle%360;
+					showinfo();
+				}
+				//落笔
+				API.PD = function(x){
+					pen = 'open';
+				}
+				//抬笔
+				API.PU = function(x){
+					pen = 'off';
+				}
+				//回家
+				API.HOME = function(x){
+					setsite(320,200)
+				}
+				API.COLOR = function(x)
+				{
+					setcolor(x);
+					showinfo();
+				}
+				//设置位置
+				function setsite(x,y){
+					site.x = x;
+					site.y = y;
+				}
+				//设置画笔样式
+				function setcolor(x){
+					color = x;
+				}
+				//显示
+				function showinfo(){
+					context.clearRect(0,0,64,40);
+					context.fillStyle="red";
+					context.fillRect(32-2,20-2,4,4);
+					context.beginPath();
+					context.moveTo(32,20); 
+					var x = 32 - 15*Math.sin(angle*Math.PI/180);
+					var y = 20 - 15*Math.cos(angle*Math.PI/180);
+					context.lineTo(x,y);
+					context.strokeStyle = color; 
+					context.stroke(); 
+					context.closePath();
+
+				}
+				return API;
+			})();
+			Logo.initialize();
+
+		</script>
+		<script type="text/javascript">
+			//$('#input').focus();
+
+			$('#command').submit(function(event){
+				event.preventDefault();
+				var command = $('#input').attr('value').toUpperCase().replace(/[^A-Z0-9\+\-\*\/\[\]\:\>\<\=\.\s\#]+/g,'').replace(/(^\s+)|(\s+$)/g,'');
+				$('#input').attr('value','');
+				process(command);
+			});
+
+			function process(command){
+
+					var cmdarray = command.replace(/(^\s+)|(\s+$)/g,'').split(/\s+/);
+
+					switch (cmdarray[0])
+					{
+						case 'FD':
+									{
+										Logo.FD(cmdarray[1]);
+										cmdarray.shift();
+										cmdarray.shift();
+										command = cmdarray.join(' ');
+										process(command);
+									}
+									break
+						case 'BK':
+									{
+										Logo.BK(cmdarray[1]);
+										cmdarray.shift();
+										cmdarray.shift();
+										command = cmdarray.join(' ');
+										process(command);
+									}
+									break
+						case 'PD':
+									{
+										Logo.PD();
+										cmdarray.shift();
+										command = cmdarray.join(' ');
+										process(command);
+									}
+									break
+						case 'PU':
+									{
+										Logo.PU();
+										cmdarray.shift();
+										command = cmdarray.join(' ');
+										process(command);
+									}
+									break
+						case 'LT':
+									{
+										Logo.LT(cmdarray[1]);
+										cmdarray.shift();
+										cmdarray.shift();
+										command = cmdarray.join(' ');
+										process(command);
+									}
+									break
+						case 'RT':
+									{
+										Logo.RT(cmdarray[1]);
+										cmdarray.shift();
+										cmdarray.shift();
+										command = cmdarray.join(' ');
+										process(command);
+									}
+									break
+						case 'REPEAT':
+									{
+										cmdarray.shift();
+										i =	cmdarray.shift();
+										command = cmdarray.join(' ');
+										console.log(command);
+										RTcommand = command.match(/\[[^\[\]]*\]/)[0];
+										console.log(RTcommand);
+
+
+										RTcommand = RTcommand.replace('[','').replace(']','');
+										
+										command = command.replace(/\[[^\[\]]*\]/,'')
+										console.log(command);
+										while(i--)
+										{
+											process(RTcommand);
+										}
+										process(command)
+									}
+									break
+						case 'HOME':
+									{
+										cmdarray.shift();
+										Logo.HOME();
+										command = cmdarray.join(' ');
+										process(command);
+									}
+									break
+						case 'COLOR':
+									{
+										cmdarray.shift();
+										color = cmdarray.shift();
+										Logo.COLOR(color);
+										command = cmdarray.join(' ');
+										process(command);
+									}
+									break
+						case 'RESET':
+									{
+										cmdarray.shift();
+										Logo.initialize();
+										command = cmdarray.join(' ');
+										process(command);
+									}
+									break
+						default:
+							
+				　　}
+			}
+
+		</script>
+	</body>
+</html>
